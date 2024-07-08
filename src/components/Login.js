@@ -1,10 +1,16 @@
 import Header from "./Header";
-import { useState } from "react";
+import { useState , useRef } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import { checkValidData } from "../utils/validate";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [errMessage, setErrMessage] = useState(null);
+
+  const email = useRef(null);
+  const password = useRef(null);
+  const name = useRef(null);
 
   const handleSignIn = () => {
     setIsSignIn(!isSignIn);
@@ -13,6 +19,12 @@ const Login = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  const handleSubmit = () => {
+   const message = isSignIn ? checkValidData(email.current.value , password.current.value) : checkValidData(email.current.value , password.current.value , name.current.value);
+   setErrMessage(message);
+
+  }
 
   return (
     <div>
@@ -24,23 +36,26 @@ const Login = () => {
           alt="bg"
         ></img>
       </div>
-      <form className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-12 bg-black w-full max-w-md mx-auto text-white rounded-lg bg-opacity-80">
+      <form onSubmit={(e) => e.preventDefault()} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-12 bg-black w-full max-w-md mx-auto text-white rounded-lg bg-opacity-80">
         <h1 className="font-bold text-3xl py-4 px-2">
           {isSignIn ? "Sign in" : "Sign up"}
         </h1>
         {!isSignIn && (
           <input
+            ref={name}
             className="p-4 my-3 w-full bg-gray-700"
             type="text"
             placeholder="Name"
           />
         )}
         <input
+        ref={email}
           className="p-4 my-3 w-full bg-gray-700"
           type="text"
           placeholder="E-mail"
         />
         <input
+        ref={password}
           className="p-4 my-3 w-full bg-gray-700"
           type={showPassword ? "text" : "password"}
           placeholder="Password"
@@ -53,7 +68,9 @@ const Login = () => {
           {!showPassword ? <FaEyeSlash /> : <FaEye />}
         </button>
 
-        <button className="p-3 my-4 bg-red-600 w-full rounded">{isSignIn ? "Sign in" : "Sign up"}</button>
+        <p className="text-red-600 font-bold p-1 m-2">{errMessage}</p>
+
+        <button className="p-3 my-4 bg-red-600 w-full rounded" onClick={handleSubmit} >{isSignIn ? "Sign in" : "Sign up"}</button>
         <p className="py-4 my-4 cursor-pointer" onClick={handleSignIn}>
           {isSignIn
             ? "New to Netflix? Sign up here"
