@@ -2,11 +2,18 @@ import Header from "./Header";
 import { useState , useRef } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { checkValidData } from "../utils/validate";
+import {createUserWithEmailAndPassword , signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {auth} from '../utils/firebase';
+import { addUser } from "../utils/UserSlice";
+import { useDispatch } from "react-redux";
+import { HOME_SCREEN_BG , USER_LOGO_URL} from "../utils/constants";
+
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [errMessage, setErrMessage] = useState(null);
+  const dispatch = useDispatch();
 
   const email = useRef(null);
   const password = useRef(null);
@@ -24,6 +31,53 @@ const Login = () => {
    const message = isSignIn ? checkValidData(email.current.value , password.current.value) : checkValidData(email.current.value , password.current.value , name.current.value);
    setErrMessage(message);
 
+   if(message) return;
+
+   if(!isSignIn){
+    createUserWithEmailAndPassword(auth, email.current.value , password.current.value)
+    .then((userCredential) => {
+      // Signed up 
+      const user = userCredential.user;
+      updateProfile(user, {
+        displayName: name.current.value , photoURL: {USER_LOGO_URL}
+      }).then(() => {
+        const { email, displayName, uid, photoURL } = auth.currentUser;
+        dispatch(
+          addUser({
+            uid: uid,
+            email: email,
+            displayName: displayName,
+            photoURL: photoURL,
+          })
+        );
+      }).catch((error) => {
+        // An error occurred
+        setErrMessage(error.code + " : " + error.message);
+      });
+
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      setErrMessage(errorCode + " : " + errorMessage);
+      // ..
+    });
+  
+   }
+   else{
+    signInWithEmailAndPassword(auth, email.current.value , password.current.value)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    setErrMessage(errorCode + " : " + errorMessage);
+  });
+   }
+
   }
 
   return (
@@ -32,7 +86,7 @@ const Login = () => {
       <div className="relative h-screen">
         <img
           className="absolute w-full h-full object-cover"
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/0552717c-9d8c-47bd-9640-4f4efa2de663/537e2c5e-c750-4d4c-9f7a-e66fe93eb977/IN-en-20240701-POP_SIGNUP_TWO_WEEKS-perspective_WEB_b00eeb83-a7e8-4b5b-8ff7-86ed92c51caf_large.jpg"
+          src={HOME_SCREEN_BG}
           alt="bg"
         ></img>
       </div>
