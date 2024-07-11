@@ -57,13 +57,7 @@ const Header = () => {
       />
       { user && <div className="flex my-auto relative">
         <img
-            className="w-4 h-4 my-7"
-            src={user.photoURL}
-            alt="up"
-            onClick={toggleDropdown}
-          ></img>
-        <img
-          className="h-9 w-9 my-4 mx-1 cursor-pointer"
+          className="h-7 w-7 my-4 mx-3 cursor-pointer"
           src={USER_LOGO_URL}
           alt="userlogo"
         />
