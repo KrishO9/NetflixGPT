@@ -7,4 +7,7 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  options: {
+    safelist: ['scrollbar-hide', 'scrollbar-thin'],
+  },
 }

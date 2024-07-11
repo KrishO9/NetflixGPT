@@ -16,3 +16,5 @@ export const API_OPTIONS = {
   };
 
 export const MOVIE_VIDEO_API = "https://api.themoviedb.org/3/movie/";
+
+export const IMG_CDN_URL = "https://image.tmdb.org/t/p/w200";
