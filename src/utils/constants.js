@@ -24,3 +24,9 @@ export const SUPPORTED_LANGUAGES = [
   { identifier: "hindi", name: "Hindi" },
   { identifier: "spanish", name: "Spanish" },
 ];
+
+export const OPENAI_API_KEY = "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"; 
+
+export const GEMINI_KEY = "AIzaSyAN-NdkwLJLGmHehKKZ-78Fyiy9h98UhOc";
+
+export const TMDB_SEARCH_API = "https://api.themoviedb.org/3/search/movie";
