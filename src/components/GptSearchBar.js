@@ -6,8 +6,6 @@ import model from "../utils/openai";
 import { API_OPTIONS, TMDB_SEARCH_API } from "../utils/constants";
 import { addGptMovies } from "../utils/gptSlice";
 
-
-
 const GptSearchBar = () => {
   const searchInput = useRef(null);
   const dispatch = useDispatch();
@@ -15,8 +13,9 @@ const GptSearchBar = () => {
 
   const searchMoviesTMDB = async (movie) => {
     const data = await fetch(
-      TMDB_SEARCH_API+"?query=" +
-        movie +
+      TMDB_SEARCH_API +
+        "?query=" +
+        movie+
         "&include_adult=false&language=en-US&page=1",
       API_OPTIONS
     );
@@ -26,7 +25,7 @@ const GptSearchBar = () => {
   };
 
   const handleGptSearch = async () => {
-    const prompt = `Recommend movies based on: ${searchInput.current.value}. Only give the names of 5 movies separated by comma. Return the name of the movies in both English and the preferred language code ${language}. Follow the format: [English Movie1], [English Movie2], [English Movie3], [English Movie4], [English Movie5], [Preferred Language Movie1], [Preferred Language Movie2], [Preferred Language Movie3], [Preferred Language Movie4], [Preferred Language Movie5]`;
+    const prompt = `Recommend movies based on: ${searchInput.current.value}. Only give the names of 5 movies separated by comma. Return the name of the movies in both English and the preferred language code ${language}. Only answer in this format format: Movie1 in English, Movie2 in English, till Movie5 in English, Movie1 in Preferred Language, Movie2 in Preferred Language, till Movie5 in Preferred Language`;
 
     try {
       const input = searchInput?.current?.value;
@@ -40,14 +39,17 @@ const GptSearchBar = () => {
         const movieList = bothLanguages.slice(0, 5);
         const langList = bothLanguages.slice(5);
 
-        const promiseArray = movieList.map((movie) => searchMoviesTMDB(movie));
+        console.log(movieList);
+        console.log(langList);
+
+        const promiseArray = movieList.map((movie) => searchMoviesTMDB(movie.trim()));
 
         const movieResults = await Promise.all(promiseArray);
+        console.log(movieResults);
 
-        dispatch(addGptMovies({movieNames:langList, movieResults: movieResults}));
-
-
-
+        dispatch(
+          addGptMovies({ movieNames: langList, movieResults: movieResults })
+        );
       }
     } catch (error) {
       console.error("Error fetching GPT results:", error);
@@ -56,9 +58,9 @@ const GptSearchBar = () => {
 
   const currentLanguage = useSelector((store) => store.config.lang);
   return (
-    <div className="pt-[10%] flex justify-center">
+    <div className="md:pt-[10%] flex justify-center  ">
       <form
-        className="w-full md:w-3/4 bg-black bg-opacity-80 rounded-lg shadow-lg"
+        className="w-full md:w-3/4 bg-black bg-opacity-80 rounded-lg shadow-lg "
         onSubmit={(e) => e.preventDefault()}
       >
         <div className="flex flex-col md:flex-row p-4">

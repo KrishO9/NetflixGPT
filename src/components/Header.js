@@ -65,10 +65,10 @@ const Header = () => {
   };
 
   return (
-    <div className="absolute px-6 py-2 bg-gradient-to-b from-black z-30 w-screen flex justify-between ">
-      <img className="w-52" src={NETFLIX_LOGO_URL} alt="logo" />
+    <div className="absolute px-6 py-2 bg-gradient-to-b from-black z-30 w-screen flex justify-between flex flex-col md:flex-row ">
+      <img className="w-52 mx-auto md:mx-0" src={NETFLIX_LOGO_URL} alt="logo" />
       {user && (
-        <div className="flex my-auto relative">
+        <div className="flex my-auto relative sm:flex justify-center">
           {showGptSearch && (
             <select
               className="p-1 bg-gray-900 text-white m-4"
@@ -94,20 +94,20 @@ const Header = () => {
             {showGptSearch ? "Close" : "Ask AI"}
           </button>
           <img
-            className="h-7 w-7 my-4 mx-3 cursor-pointer"
+            className="h-7 w-7 my-auto ml-2 cursor-pointer"
             src={USER_LOGO_URL}
             alt="userlogo"
           />
           {showDropdown ? (
-            <img
-              className="w-4 h-4 my-7"
+            <img 
+              className="w-4 h-4 mx-1 my-auto cursor-pointer"
               src={DOWN_LOGO_URL}
               alt="down"
               onClick={toggleDropdown}
             ></img>
           ) : (
             <img
-              className="w-4 h-4 my-7"
+              className="w-4 h-4 my-auto mx-1 cursor-pointer"
               src={UP_LOGO_URL}
               alt="up"
               onClick={toggleDropdown}

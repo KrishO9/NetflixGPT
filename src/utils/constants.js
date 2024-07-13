@@ -11,7 +11,7 @@ export const API_OPTIONS = {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NDY5Mzk1ZGI0NzA2OTZlNGJmYzFhM2UzZWZkZTcyYSIsIm5iZiI6MTcyMDYyMDAxMS40MDA4NTUsInN1YiI6IjY2OGU5MDRhMzFlN2ExMGY2MWIzMTFkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nT96PTN6zrJuF3wLfcvkBihk4ih983UZPFKaYtL5U1k'
+      Authorization: 'Bearer'+ process.env.REACT_APP_TMDB_KEY,
     }
   };
 
@@ -24,9 +24,7 @@ export const SUPPORTED_LANGUAGES = [
   { identifier: "hindi", name: "Hindi" },
   { identifier: "spanish", name: "Spanish" },
 ];
-
-export const OPENAI_API_KEY = "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"; 
-
-export const GEMINI_KEY = "AIzaSyAN-NdkwLJLGmHehKKZ-78Fyiy9h98UhOc";
+ 
+export const GEMINI_KEY = process.env.REACT_APP_GEMINI_KEY;
 
 export const TMDB_SEARCH_API = "https://api.themoviedb.org/3/search/movie";
